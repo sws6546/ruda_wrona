@@ -8,19 +8,18 @@ export async function POST(req: NextRequest) {
 
   let username: string = ""
 
-  if(token == undefined) {
+  if (token == undefined) {
     return new Response(JSON.stringify({err: "bad token"}))
   }
   jwt.verify(token, process.env.JWT_TOKEN as string, (err: any, decoded: any) => {
     if (err) {
       return new Response(JSON.stringify({err: "bad token"}))
-    }
-    else {
+    } else {
       username = decoded.username
     }
   })
 
-  if(
+  if (
     postTitle == "" ||
     postContent == "" ||
     section == ""
@@ -30,6 +29,13 @@ export async function POST(req: NextRequest) {
 
   const client = await clientPromise
   const postsCollecion = client.db("ruda-wrona").collection('posts')
+
+  const newestPost = await postsCollecion.findOne({author: username}, {sort: {createdDate: -1}})
+  if (newestPost) {
+    if (Date.now() - newestPost.createdDate < 60000) {
+      return new Response(JSON.stringify({err: "wait a moment"}))
+    }
+  }
 
   const postValue = {
     author: username,
