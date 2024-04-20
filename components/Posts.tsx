@@ -12,6 +12,7 @@ export default async function Posts({ pathname, page }: { pathname: string, page
             <p className="text-sm">{post.author}</p>
             <hr className="border-1 border-slate-500 w-full" />
             <p className="text-xl">{post.content}</p>
+            <p>{post.createdDate}</p>
           </div>
         ))
       }

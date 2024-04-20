@@ -11,7 +11,7 @@ export async function getPosts(page: number, pathname: string) {
   const db = client.db("ruda-wrona")
   const postsCollection = db.collection('posts')
 
-  return await postsCollection.find({ path: pathname }).skip(page - 1).limit(10).toArray()
+  return await postsCollection.find({ path: pathname }).sort({createdDate: -1}).skip(page - 1).limit(10).toArray()
 }
 
 export async function getSections() {

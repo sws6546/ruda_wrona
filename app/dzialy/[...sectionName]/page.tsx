@@ -2,6 +2,8 @@ import CategorieButton from "@/components/CategorieButton"
 import Posts from "@/components/Posts"
 import { getSections } from "@/lib/actions"
 import { redirect } from "next/navigation"
+import { cookies } from "next/headers";
+import AddPostForm from "@/components/AddPostForm";
 
 export default async function Hello({ params }: { params: { sectionName: string[] | number[] } }) {
   const sections = await getSections()
@@ -12,7 +14,7 @@ export default async function Hello({ params }: { params: { sectionName: string[
       sectionExist = true
     }
   })
-  if (sectionExist == false) {
+  if (!sectionExist) {
     redirect("/")
   }
 
@@ -21,6 +23,23 @@ export default async function Hello({ params }: { params: { sectionName: string[
     page = 1
   }
 
+  let logged = false
+  const data = await fetch("http://localhost:3000/api/isLogged", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      jwt: cookies().get("jwt")?.value
+    })
+  })
+  const loggedData = await data.json()
+  if (loggedData.ok) {
+    logged = true
+  }
+
+  // @ts-ignore
+  // @ts-ignore
   return (
     <div className="w-full flex flex-row justify-center items-center">
       <div className="w-full md:w-2/3 text-center pt-10 pb-10 flex flex-col justify-center">
@@ -37,6 +56,14 @@ export default async function Hello({ params }: { params: { sectionName: string[
             }
           </div>
           <div className="w-4/6">
+            {
+              logged ? (
+                <AddPostForm section={params.sectionName[0] as string} />
+              )
+              : (
+                <h1></h1>
+              )
+            }
             <Posts pathname={`/dzialy/${params.sectionName[0]}`} page={page} />
           </div>
         </div>
