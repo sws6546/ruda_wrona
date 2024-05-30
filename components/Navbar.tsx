@@ -1,21 +1,20 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
-import { logout } from "@/lib/actions";
+import { isLoggedForServerComponent, logout } from "@/lib/actions";
 
 export default async function Navbar() {
 
   let logged = false
-  const data = await fetch("http://localhost:3000/api/isLogged", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      jwt: cookies().get("jwt")?.value
+  let username = ""
+  await isLoggedForServerComponent(cookies().get("jwt")?.value as string)
+    .then((loggedData: any) => {
+      if(loggedData.ok) {
+        logged = true
+        username = loggedData.ok
+      }
     })
-  })
-  const loggedData = await data.json()
-  if (loggedData.ok) {
+
+  if (logged) {
     logged = true
   }
 
@@ -26,7 +25,7 @@ export default async function Navbar() {
         {
           logged ? (
             <>
-              <h1>{loggedData.ok}</h1>
+              <h1>{username}</h1>
               <form action={logout}>
                 <input type="submit" value="Wyloguj" className="pl-4 pr-4 rounded-xl bg-red-500 hover:bg-red-600 transition" />
               </form>

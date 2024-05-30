@@ -1,19 +1,17 @@
-import { register } from "@/lib/actions"
+import { isLoggedForServerComponent, register } from "@/lib/actions"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
 export default async function Login() {
-  const data = await fetch("http://localhost:3000/api/isLogged", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      jwt: cookies().get("jwt")?.value
+  let logged = false
+  await isLoggedForServerComponent(cookies().get("jwt")?.value as string)
+    .then((loggedData: any) => {
+      if(loggedData.ok) {
+        logged = true
+      }
     })
-  })
-  const loggedData = await data.json()
-  if (loggedData.ok) {
+
+  if (logged) {
     redirect("/")
   }
 
