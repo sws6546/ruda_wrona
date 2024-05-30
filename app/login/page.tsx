@@ -21,7 +21,7 @@ export default async function Login() {
         <label htmlFor="uName"> Nazwa urzytkownika </label>
         <input type="text" id="uName" name="uName" className="rounded-xl" />
         <label htmlFor="uPwd"> Hasło </label>
-        <input type="text" id="uPwd" name="uPwd" className="rounded-xl" />
+        <input type="password" id="uPwd" name="uPwd" className="rounded-xl" />
         <p className="text-red-800">{cookies().get("err")?.value}</p>
         <input type="submit" value="ZALOGUJ" className="p-4 bg-blue-400 hover:bg-blue-500 transition cursor-pointer rounded-xl" />
       </form>
