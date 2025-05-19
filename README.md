@@ -14,23 +14,5 @@ config:
 MONGODB_URI=<url for mongodb>
 JWT_TOKEN=<eg. secret>
 ```
-* in mongo `db>ruda-wrona>sections` add:
-```
-{
-    "_id":{"$oid":"66532f5eac0a64fcccd31363"}, // id can be random
-    "path":"/dzialy/glowna",
-    "name":"Główna"
-}
-```
-* add other sections if you want
 
-run dev:
-```
-yarn dev
-```
-
-build and run for prod:
-```
-yarn build
-yarn start
-```
+and just run `docker compose up`
