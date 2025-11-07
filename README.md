@@ -11,7 +11,7 @@ config:
 * add `.env.local` in root of directory
 * put env variables:
 ```
-MONGODB_URI=<url for mongodb>
+MONGODB_URI=mongodb://root:toor@mongo:27017/
 JWT_TOKEN=<eg. secret>
 ```
 
